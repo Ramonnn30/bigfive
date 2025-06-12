@@ -72,9 +72,11 @@
 
   <script>
     const data = [
-      { img: "https://static.wixstatic.com/media/0c1a54_8c1fed90534343e8af05341286f00f0e~mv2.png", word: "koper" },
-      { img: "https://static.wixstatic.com/media/0c1a54_8c1fed90534343e8af05341286f00f0e~mv2.png", word: "valkuil" },
-      { img: "https://static.wixstatic.com/media/0c1a54_8c1fed90534343e8af05341286f00f0e~mv2.png", word: "cryptogram" }
+      { img: "https://picsum.photos/seed/boom/400/300", word: "boom" },
+      { img: "https://picsum.photos/seed/huis/400/300", word: "huis" },
+      { img: "https://picsum.photos/seed/kat/400/300", word: "kat" },
+      { img: "https://picsum.photos/seed/auto/400/300", word: "auto" },
+      { img: "https://picsum.photos/seed/zon/400/300", word: "zon" }
     ];
 
     let current = 0;
