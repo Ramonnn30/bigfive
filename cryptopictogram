@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Typing Quiz</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 1em;
+      max-width: 600px;
+      margin: auto;
+    }
+    .image {
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: contain;
+    }
+    .inputs {
+      margin: 1em 0;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .inputs input {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      font-size: 1.2em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .inputs input.correct {
+      background-color: #4caf50;
+      color: white;
+      pointer-events: none;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1em;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+    }
+    button:disabled {
+      background-color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img id="image" class="image" src="" alt="">
+    <div id="inputContainer" class="inputs"></div>
+    <div class="nav-buttons">
+      <button id="prevBtn">←</button>
+      <button id="nextBtn">→</button>
+    </div>
+  </div>
+
+  <script>
+    const data = [
+      { img: "https://static.wixstatic.com/media/0c1a54_8c1fed90534343e8af05341286f00f0e~mv2.png", word: "koper" },
+      { img: "https://static.wixstatic.com/media/0c1a54_8c1fed90534343e8af05341286f00f0e~mv2.png", word: "valkuil" },
+      { img: "https://static.wixstatic.com/media/0c1a54_8c1fed90534343e8af05341286f00f0e~mv2.png", word: "cryptogram" }
+    ];
+
+    let current = 0;
+    const image = document.getElementById("image");
+    const inputContainer = document.getElementById("inputContainer");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function loadImage(index) {
+      const item = data[index];
+      image.src = item.img;
+      image.alt = item.word;
+      inputContainer.innerHTML = "";
+      for (let i = 0; i < item.word.length; i++) {
+        const input = document.createElement("input");
+        input.maxLength = 1;
+        input.dataset.index = i;
+        input.addEventListener("input", handleInput);
+        input.addEventListener("keydown", handleKey);
+        inputContainer.appendChild(input);
+      }
+    }
+
+    function handleInput(e) {
+      const inputs = inputContainer.querySelectorAll("input");
+      const item = data[current];
+      const index = parseInt(e.target.dataset.index);
+      const char = e.target.value.toLowerCase();
+
+      if (char && index < item.word.length - 1) {
+        inputs[index + 1].focus();
+      }
+
+      checkWord();
+    }
+
+    function handleKey(e) {
+      const index = parseInt(e.target.dataset.index);
+      const inputs = inputContainer.querySelectorAll("input");
+
+      if (e.key === "Backspace" && !e.target.value && index > 0) {
+        inputs[index - 1].focus();
+      }
+    }
+
+    function checkWord() {
+      const inputs = inputContainer.querySelectorAll("input");
+      const item = data[current];
+      let typed = "";
+      inputs.forEach(input => typed += input.value.toLowerCase());
+      if (typed === item.word) {
+        inputs.forEach(input => input.classList.add("correct"));
+      } else {
+        inputs.forEach(input => input.classList.remove("correct"));
+      }
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (current > 0) {
+        current--;
+        loadImage(current);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (current < data.length - 1) {
+        current++;
+        loadImage(current);
+      }
+    });
+
+    window.addEventListener("load", () => loadImage(current));
+  </script>
+</body>
+</html>
